@@ -8,11 +8,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ch.zhaw.springboot.models.PatientRequest;
 import ch.zhaw.springboot.models.PatientSeverityCount;
 import ch.zhaw.springboot.models.Severity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +48,12 @@ public class PatientRestController {
         return result.map(patient -> new ResponseEntity<>(patient, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PostMapping(value = "patients/patients")
+    public ResponseEntity<Patient> createPatient(@RequestBody PatientRequest patientRequest) {
+        Patient result = this.repository.save(new Patient(patientRequest.getName(), patientRequest.getAge()));
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "patients/patients/findPatientByDiagnosisCreatedAt/{createdAt}", method = RequestMethod.GET)
     public ResponseEntity<List<String>> findPatientByDiagnosisCreatedAt(@PathVariable("createdAt") String createdAt) {
         Object[] results = this.repository.findPatientByDiagnosisCreatedAt(LocalDate.parse(createdAt));
@@ -62,7 +70,7 @@ public class PatientRestController {
         List<Object[]> results = this.repository.getCountOfSeverityInfoByPatientId(id);
 
         if (results.size() > 0) {
-            return new ResponseEntity<>(results.stream().map(result -> new PatientSeverityCount(((BigInteger)result[0]).intValue(), convertStringToSeverity((String) result[1]), (String) result[2])).collect(Collectors.toList()), HttpStatus.OK);
+            return new ResponseEntity<>(results.stream().map(result -> new PatientSeverityCount(((BigInteger) result[0]).intValue(), convertStringToSeverity((String) result[1]), (String) result[2])).collect(Collectors.toList()), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
