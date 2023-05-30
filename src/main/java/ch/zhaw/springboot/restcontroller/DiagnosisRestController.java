@@ -41,7 +41,8 @@ public class DiagnosisRestController {
 	@RequestMapping(value = "patients/diagnosis/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Diagnosis> getDiagnosisById(@PathVariable("id") long id) {
 		Optional<Diagnosis> result = this.repository.findById(id);
-		return result.map(diagnosis -> new ResponseEntity<>(diagnosis, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+		return result.map(diagnosis -> new ResponseEntity<>(diagnosis, HttpStatus.OK))
+				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	@PostMapping(value = "patients/diagnosis")

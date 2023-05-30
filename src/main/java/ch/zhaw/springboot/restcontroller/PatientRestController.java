@@ -56,10 +56,10 @@ public class PatientRestController {
 
     @RequestMapping(value = "patients/patients/findPatientByDiagnosisCreatedAt/{createdAt}", method = RequestMethod.GET)
     public ResponseEntity<List<String>> findPatientByDiagnosisCreatedAt(@PathVariable("createdAt") String createdAt) {
-        Object[] results = this.repository.findPatientByDiagnosisCreatedAt(LocalDate.parse(createdAt));
+        List<String> results = this.repository.findPatientByDiagnosisCreatedAt(LocalDate.parse(createdAt));
 
-        if (results.length > 0) {
-            return new ResponseEntity<>(Arrays.stream(results).map(result -> (String) result).collect(Collectors.toList()), HttpStatus.OK);
+        if (results.size() > 0) {
+            return new ResponseEntity<>(results, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

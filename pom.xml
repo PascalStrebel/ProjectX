@@ -63,6 +63,11 @@
 			<artifactId>javassist</artifactId>
 			<version>3.23.1-GA</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.2</version>
+		</dependency>
 	</dependencies>
 
 	<!-- The Spring Boot Maven Plugin provides Spring Boot support in Maven, 
